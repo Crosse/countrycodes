@@ -1,12 +1,5 @@
 package countrycodes
 
-var (
-	countryCodes map[string]CountryCode
-	isoLookup    map[string]CountryCode
-	languages    map[string][]CountryCode
-	continents   map[string][]CountryCode
-)
-
 // CountryCode represents a country's ISO codes and other information.
 type CountryCode struct {
 	// ISOAlpha2 is the 2-letter ISO-3166-1 alpha-2 code.
@@ -40,6 +33,7 @@ type CountryCode struct {
 	GeoNameID          string
 	Neighbors          []string
 	EquivalentFIPSCode string
+	BusinessRegion     string
 }
 
 func FindByISOAlpha2(code string) (CountryCode, bool) {
@@ -107,6 +101,24 @@ func Continents() []string {
 
 func FindByContinent(continent string) ([]CountryCode, bool) {
 	c, ok := continents[continent]
+	if !ok {
+		return []CountryCode{}, false
+	}
+
+	return c, true
+}
+
+func BusinessRegions() []string {
+	var c []string
+	for k := range businessRegions {
+		c = append(c, k)
+	}
+
+	return c
+}
+
+func FindByBusinessRegion(region string) ([]CountryCode, bool) {
+	c, ok := businessRegions[region]
 	if !ok {
 		return []CountryCode{}, false
 	}

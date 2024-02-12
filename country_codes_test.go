@@ -5,6 +5,7 @@ import (
 	"runtime"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -53,6 +54,12 @@ func TestFindByISOAlpha(t *testing.T) {
 			require.False(t, ok)
 			require.Empty(t, cc)
 		})
+	}
+}
+
+func TestBusinessRegionsExists(t *testing.T) {
+	for _, v := range countryCodes {
+		assert.NotEmpty(t, v.BusinessRegion, "no BusinessRegion for %q", v.ISOAlpha2)
 	}
 }
 

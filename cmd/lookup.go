@@ -21,6 +21,7 @@ func main() {
 			continue
 		}
 		fmt.Printf("Name: %s\n", cc.Name)
+		fmt.Printf("Business Region: %s\n", cc.BusinessRegion)
 		fmt.Printf("ISO-3166-1 alpha-2 code: %s\n", cc.ISOAlpha2)
 		fmt.Printf("ISO-3166-1 alpha-3 code: %s\n", cc.ISOAlpha3)
 		fmt.Printf("ISO-3166-1 numeric code: %s\n", cc.ISONumeric)
