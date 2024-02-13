@@ -17,8 +17,11 @@ func main() {
 	for _, code := range os.Args[1:] {
 		cc, ok := countrycodes.FindByISOAlpha(strings.ToUpper(code))
 		if !ok {
-			fmt.Fprintf(os.Stderr, "not an ISO-3166 country code: %q", code)
-			continue
+			cc, ok = countrycodes.FindByName(code)
+			if !ok {
+				fmt.Fprintf(os.Stderr, "not an ISO-3166 country code or country name: %q\n", code)
+				continue
+			}
 		}
 		fmt.Printf("Name: %s\n", cc.Name)
 		fmt.Printf("Business Region: %s\n", cc.BusinessRegion)

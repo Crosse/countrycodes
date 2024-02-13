@@ -1,5 +1,7 @@
 package countrycodes
 
+import "strings"
+
 // CountryCode represents a country's ISO codes and other information.
 type CountryCode struct {
 	// ISOAlpha2 is the 2-letter ISO-3166-1 alpha-2 code.
@@ -36,6 +38,15 @@ type CountryCode struct {
 	BusinessRegion     string
 }
 
+func FindByName(name string) (CountryCode, bool) {
+	for _, c := range countryCodes {
+		if strings.EqualFold(c.Name, name) {
+			return c, true
+		}
+	}
+	return CountryCode{}, false
+}
+
 func FindByISOAlpha2(code string) (CountryCode, bool) {
 	c, ok := countryCodes[code]
 	return c, ok
@@ -55,8 +66,11 @@ func GetByISOAlpha3(code string) CountryCode {
 }
 
 func FindByISOAlpha(code string) (CountryCode, bool) {
-	c, ok := FindByISOAlpha2(code)
-	if !ok {
+	var c CountryCode
+	var ok bool
+	if len(code) == 2 {
+		c, ok = FindByISOAlpha2(code)
+	} else if len(code) == 3 {
 		c, ok = FindByISOAlpha3(code)
 	}
 
@@ -64,9 +78,11 @@ func FindByISOAlpha(code string) (CountryCode, bool) {
 }
 
 func GetByISOAlpha(code string) CountryCode {
-	c, ok := FindByISOAlpha2(code)
-	if !ok {
-		c = GetByISOAlpha3(code)
+	var c CountryCode
+	if len(code) == 2 {
+		c, _ = FindByISOAlpha2(code)
+	} else if len(code) == 3 {
+		c, _ = FindByISOAlpha3(code)
 	}
 
 	return c
@@ -81,24 +97,6 @@ func FindByLanguage(code string) ([]CountryCode, bool) {
 	return c, true
 }
 
-func Languages() []string {
-	var l []string
-	for k := range languages {
-		l = append(l, k)
-	}
-
-	return l
-}
-
-func Continents() []string {
-	var c []string
-	for k := range continents {
-		c = append(c, k)
-	}
-
-	return c
-}
-
 func FindByContinent(continent string) ([]CountryCode, bool) {
 	c, ok := continents[continent]
 	if !ok {
@@ -106,15 +104,6 @@ func FindByContinent(continent string) ([]CountryCode, bool) {
 	}
 
 	return c, true
-}
-
-func BusinessRegions() []string {
-	var c []string
-	for k := range businessRegions {
-		c = append(c, k)
-	}
-
-	return c
 }
 
 func FindByBusinessRegion(region string) ([]CountryCode, bool) {
